@@ -69,7 +69,8 @@ This project was built to practice:
 
 - Implement matrix transposition
 - Add matrix determinant calculation
-- Improve formatting of matrix display output
+- Add reduced row echelon form
+- Improve output displays
 - Add unit tests
 
 ## License
