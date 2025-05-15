@@ -67,7 +67,6 @@ This project was built to practice:
 
 ## TODO
 
-- Add support for matrix multiplication
 - Implement matrix transposition
 - Add matrix determinant calculation
 - Improve formatting of matrix display output
