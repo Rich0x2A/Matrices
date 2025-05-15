@@ -8,7 +8,7 @@ int main()
 	Matrix *matrices = NULL;
 	int size = 0;
 
-	handle_menu(&matrices, &size);
+	menu(&matrices, &size);
 
 	for (int i = 0; i < size; ++i)
 		free_matrix(&matrices[i]);
