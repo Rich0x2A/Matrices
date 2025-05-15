@@ -17,7 +17,10 @@ void handle_menu(Matrix **matrices, int *n)
                 printf("| (4) Mult two matrices |\n");
                 printf("| (5) Scale matrix      |\n");
                 printf("| (6) Row echelon form  |\n");
+		printf("| (7) Transpose matrix  |\n");
                 printf("| (n) New matrix        |\n");
+		printf("| (z) Zero matrix       |\n");
+		printf("| (i) Identity matrix   |\n");
                 printf("| (q) Quit              |\n");
                 printf("+-----------------------+\n");
                 scanf(" %c", &c);
@@ -135,6 +138,23 @@ void handle_menu(Matrix **matrices, int *n)
                         print_matrix(&(*matrices)[ix]);
                         break;
                 }
+		case '7':
+		{
+			if (*n == 0) {
+				printf("ERROR: NO MATRICES EXIST\n");
+				break;
+			}
+			int ix;
+			printf("MATRIX INDEX FOR TRANSPOSE (0 to %d): ", *n - 1);
+			scanf("%d", &ix);
+			if (ix < 0 || ix >= *n) {
+				printf("ERROR: INVALID MATRIX INDEX\n");
+				break;
+			}
+			Matrix result = transpose_matrix(&(*matrices)[ix]);
+			print_matrix(&result);
+			free_matrix(&result);
+		}
                 case 'n':
                 {
                         Matrix m = read_dims();
@@ -149,9 +169,43 @@ void handle_menu(Matrix **matrices, int *n)
                         *matrices = resized;
                         (*matrices)[*n] = m;
                         (*n)++;
-                        printf("Matrix #%d created.\n", *n);
+                        printf("SUCCESS: MATRIX #%d CREATED\n", *n);
                         break;
                 }
+		case 'z':
+		{
+			Matrix z = read_dims();
+			z = alloc_matrix(z.nrows, z.ncols);
+			Matrix *resized = realloc(*matrices, (*n + 1) * sizeof(Matrix));
+			if (!resized) {
+				printf("ERROR: MEMORY ALLOCATION FAILED\n");
+				break;
+			}	
+			*matrices = resized;
+			(*matrices)[*n] = z;
+			(*n)++;
+			printf("SUCCESS: MATRIX #%d CREATED\n", *n);
+			print_matrix(&z);
+			break;
+		}
+		case 'i':
+		{
+			int size;
+			printf("IDENTITY MATRIX SIZE: ");
+			scanf("%d", &size);
+			if (size <= 0) {
+				printf("ERROR: INVALID MATRIX SIZE\n");
+				break;
+			}
+			Matrix i = identity_matrix(size);
+			Matrix *resized = realloc(*matrices, (*n + 1) * sizeof(Matrix));
+			*matrices = resized;
+			(*matrices)[*n] = i;
+			(*n)++;
+			printf("SUCCESS: MATRIX #%d CREATED\n", *n);
+			print_matrix(&i);
+			break;
+		}
                 case 'q':
                         printf("QUITTING PROGRAM, TAKE CARE\n");
                         break;
