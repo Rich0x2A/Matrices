@@ -34,18 +34,49 @@ void read_matrix(Matrix *m)
 
 void print_matrix(Matrix *m)
 {
-	printf("\nMatrix (%d x %d):\n", m->nrows, m->ncols);
-	printf("+-------------------+\n");
+	int border = 2 + m->ncols * 9;
+	printf("\nMATRIX (%d x %d):\n", m->nrows, m->ncols);
+	for (int i = 0; i < border; ++i)
+		printf("+");
+	printf("\n");
 	for (int i = 0; i < m->nrows; ++i)
 	{
 		printf("| ");
 		for (int j = 0; j < m->ncols; ++j)
-		{
 			printf("%8.2lf ", m->data[i][j]);
-		}
 		printf("|\n");
 	}
-	printf("+-------------------+\n\n");
+	for (int i = 0; i < border; ++i)
+		printf("+");
+	printf("\n\n");
+}
+
+Matrix identity_matrix(int n)
+{
+	Matrix id;
+	id = alloc_matrix(n, n);	
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			if (i == j) 
+				id.data[i][j] = 1;
+			else 
+				id.data[i][j] = 0;
+		}
+	}
+	return id;
+}
+
+Matrix zero_matrix(int r, int c)
+{
+	Matrix z;
+	z = alloc_matrix(r, c);
+	for (int i = 0; i < r; ++i)
+		for (int j = 0; j < c; ++j)
+			z.data[i][j] = 0;
+	return z;
+			
 }
 
 Matrix add_matrix(Matrix *m, Matrix *n)
@@ -80,7 +111,8 @@ Matrix multiply_matrix(Matrix *m, Matrix *n)
 {
     if (m->ncols != n->nrows)
     {
-        fprintf(stderr, "ERROR: NUMBER OF COLUMNS OF MATRIX 1 MUST BE EQUAL TO NUMBER OF ROWS OF MATRIX 2\n");
+        fprintf(stderr, "ERROR: NUMBER OF COLUMNS OF MATRIX 1 "
+			"MUST BE EQUAL TO NUMBER OF ROWS OF MATRIX 2\n");
         exit(EXIT_FAILURE);
     }
 
@@ -98,6 +130,15 @@ Matrix multiply_matrix(Matrix *m, Matrix *n)
     }
 
     return r;
+}
+
+Matrix transpose_matrix(Matrix* m)
+{
+	Matrix r = alloc_matrix(m->ncols, m->nrows);
+	for (int i = 0; i < r.nrows; ++i)
+		for (int j = 0; j < r.ncols; ++j)
+			r.data[i][j] = m->data[j][i];
+	return r;
 }
 
 Matrix scale_matrix(Matrix *m, double k)
